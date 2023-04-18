@@ -7,10 +7,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "channel_poc.settings")
 
 application = ProtocolTypeRouter({
 
-    'http': get_asgi_application(),
-    'websocket' : URLRouter(
+    "http": get_asgi_application(),
+    "websocket" : URLRouter(
         accounts.routing.websocket_urlpatterns)
-
 })
-
-

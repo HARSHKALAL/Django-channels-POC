@@ -1,20 +1,18 @@
 from channels.consumer import SyncConsumer
-
+from time import sleep
 
 class MySyncConsumer(SyncConsumer):
-    def websocket_connect(self,event):
-        print("websocket connected...",event)
-        self.send({
-            'type':'websocket.accept'
-        })
-    
-    def websocket_receive(self,event):
-        print("websocket received...",event)
-        self.send({
-            'type':'websocket.send',
-            'text':"Hello world",
-        })
-    
-    def websocket_disconnect(self,event):
-        print("websocket Disconnect...",event)
 
+    def websocket_connect(self, event):
+        self.send({
+            "type":'websocket.accept'
+        })
+    
+    def websocket_receive(self, event):
+        self.send({
+            "type": 'websocket.send',
+            "text": event['text'],
+        })
+
+    def websocket_disconnect(self, event):
+        pass

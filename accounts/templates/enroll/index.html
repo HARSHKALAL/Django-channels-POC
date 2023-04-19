@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        html {
+            box-sizing: border-box;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Roboto", sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        .page {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .marvel-device .screen {
+            text-align: left;
+        }
+
+        .screen-container {
+            height: 100%;
+        }
+
+        /* Status Bar */
+
+        .status-bar {
+            height: 25px;
+            background: #004e45;
+            color: #fff;
+            font-size: 14px;
+            padding: 0 8px;
+        }
+
+        .status-bar:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .status-bar div {
+            float: right;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            margin: 0 0 0 8px;
+            font-weight: 600;
+        }
+
+        /* Chat */
+
+        .chat {
+            height: calc(100% - 69px);
+        }
+
+        .chat-container {
+            height: 100%;
+        }
+
+        /* User Bar */
+
+        .user-bar {
+            height: 55px;
+            background: #005e54;
+            color: #fff;
+            padding: 0 8px;
+            font-size: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-bar:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .user-bar div {
+            float: left;
+            transform: translateY(-50%);
+            position: relative;
+            top: 50%;
+        }
+
+        .user-bar .actions {
+            float: right;
+            margin: 0 0 0 20px;
+        }
+
+        .user-bar .actions.more {
+            margin: 0 12px 0 32px;
+        }
+
+        .user-bar .actions.attachment {
+            margin: 0 0 0 30px;
+        }
+
+        .user-bar .actions.attachment i {
+            display: block;
+            transform: rotate(-45deg);
+        }
+
+        .user-bar .avatar {
+            margin: 0 0 0 5px;
+            width: 36px;
+            height: 36px;
+        }
+
+        .user-bar .avatar img {
+            border-radius: 50%;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+            display: block;
+            width: 100%;
+        }
+
+        .user-bar .name {
+            font-size: 17px;
+            font-weight: 600;
+            text-overflow: ellipsis;
+            letter-spacing: 0.3px;
+            margin: 0 0 0 8px;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 110px;
+        }
+
+        .user-bar .status {
+            display: block;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0;
+        }
+
+        /* Conversation */
+
+        .conversation {
+            height: calc(100% - 12px);
+            position: relative;
+            background: #efe7dd url("https://cloud.githubusercontent.com/assets/398893/15136779/4e765036-1639-11e6-9201-67e728e86f39.jpg") repeat;
+            z-index: 0;
+        }
+
+        .conversation ::-webkit-scrollbar {
+            transition: all .5s;
+            width: 5px;
+            height: 1px;
+            z-index: 10;
+        }
+
+        .conversation ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .conversation ::-webkit-scrollbar-thumb {
+            background: #b3ada7;
+        }
+
+        .conversation .conversation-container {
+            height: calc(100% - 68px);
+            box-shadow: inset 0 10px 10px -10px #000000;
+            overflow-x: hidden;
+            padding: 0 16px;
+            margin-bottom: 5px;
+        }
+
+        .conversation .conversation-container:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Messages */
+
+        .message {
+            color: #000;
+            clear: both;
+            line-height: 18px;
+            font-size: 15px;
+            padding: 8px;
+            position: relative;
+            margin: 8px 0;
+            max-width: 85%;
+            word-wrap: break-word;
+            z-index: -1;
+        }
+
+        .message:after {
+            position: absolute;
+            content: "";
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .metadata {
+            display: inline-block;
+            float: right;
+            padding: 0 0 0 7px;
+            position: relative;
+            bottom: -4px;
+        }
+
+        .metadata .time {
+            color: rgba(0, 0, 0, .45);
+            font-size: 11px;
+            display: inline-block;
+        }
+
+        .metadata .tick {
+            display: inline-block;
+            margin-left: 2px;
+            position: relative;
+            top: 4px;
+            height: 16px;
+            width: 16px;
+        }
+
+        .metadata .tick svg {
+            position: absolute;
+            transition: .5s ease-in-out;
+        }
+
+        .metadata .tick svg:first-child {
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-transform: perspective(800px) rotateY(180deg);
+            transform: perspective(800px) rotateY(180deg);
+        }
+
+        .metadata .tick svg:last-child {
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-transform: perspective(800px) rotateY(0deg);
+            transform: perspective(800px) rotateY(0deg);
+        }
+
+        .metadata .tick-animation svg:first-child {
+            -webkit-transform: perspective(800px) rotateY(0);
+            transform: perspective(800px) rotateY(0);
+        }
+
+        .metadata .tick-animation svg:last-child {
+            -webkit-transform: perspective(800px) rotateY(-179.9deg);
+            transform: perspective(800px) rotateY(-179.9deg);
+        }
+
+        .message:first-child {
+            margin: 16px 0 8px;
+        }
+
+        .message.received {
+            background: #fff;
+            border-radius: 0px 5px 5px 5px;
+            float: left;
+        }
+
+        .message.received .metadata {
+            padding: 0 0 0 16px;
+        }
+
+        .message.received:after {
+            border-width: 0px 10px 10px 0;
+            border-color: transparent #fff transparent transparent;
+            top: 0;
+            left: -10px;
+        }
+
+        .message.sent {
+            background: #e1ffc7;
+            border-radius: 5px 0px 5px 5px;
+            float: right;
+        }
+
+        .message.sent:after {
+            border-width: 0px 0 10px 10px;
+            border-color: transparent transparent transparent #e1ffc7;
+            top: 0;
+            right: -10px;
+        }
+
+        /* Compose */
+
+        .conversation-compose {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            overflow: hidden;
+            height: 50px;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .conversation-compose div,
+        .conversation-compose input {
+            background: #fff;
+            height: 100%;
+        }
+
+        .conversation-compose .emoji {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 5px 0 0 5px;
+            flex: 0 0 auto;
+            margin-left: 8px;
+            width: 48px;
+        }
+
+        .conversation-compose .input-msg {
+            border: 0;
+            flex: 1 1 auto;
+            font-size: 16px;
+            margin: 0;
+            outline: none;
+            min-width: 50px;
+        }
+
+        .conversation-compose .photo {
+            flex: 0 0 auto;
+            border-radius: 0 0 5px 0;
+            text-align: center;
+            position: relative;
+            width: 48px;
+        }
+
+        .conversation-compose .photo:after {
+            border-width: 0px 0 10px 10px;
+            border-color: transparent transparent transparent #fff;
+            border-style: solid;
+            position: absolute;
+            width: 0;
+            height: 0;
+            content: "";
+            top: 0;
+            right: -10px;
+        }
+
+        .conversation-compose .photo i {
+            display: block;
+            color: #7d8488;
+            font-size: 24px;
+            transform: translate(-50%, -50%);
+            position: relative;
+            top: 50%;
+            left: 50%;
+        }
+
+        .conversation-compose .send {
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+            flex: 0 0 auto;
+            margin-left: 8px;
+            margin-right: 8px;
+            padding: 0;
+            position: relative;
+            outline: none;
+        }
+
+        .conversation-compose .send .circle {
+            background: #008a7c;
+            border-radius: 50%;
+            color: #fff;
+            position: relative;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .conversation-compose .send .circle i {
+            font-size: 24px;
+            margin-left: 5px;
+        }
+
+        /* Small Screens */
+
+        @media (max-width: 768px) {
+            .marvel-device.nexus5 {
+                border-radius: 0;
+                flex: none;
+                padding: 0;
+                max-width: none;
+                overflow: hidden;
+                height: 100%;
+                width: 100%;
+            }
+
+            .marvel-device>.screen .chat {
+                visibility: visible;
+            }
+
+            .marvel-device {
+                visibility: hidden;
+            }
+
+            .marvel-device .status-bar {
+                display: none;
+            }
+
+            .screen-container {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+
+            .conversation {
+                height: calc(100vh - 55px);
+            }
+
+            .conversation .conversation-container {
+                height: calc(100vh - 120px);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="page">
+        <div class="marvel-device nexus5">
+            <div class="top-bar"></div>
+            <div class="sleep"></div>
+            <div class="volume"></div>
+            <div class="camera"></div>
+            <div class="screen">
+                <div class="screen-container">
+                    <div class="status-bar">
+                        <div class="time"></div>
+                        <div class="battery">
+                            <i class="zmdi zmdi-battery"></i>
+                        </div>
+                        <div class="network">
+                            <i class="zmdi zmdi-network"></i>
+                        </div>
+                        <div class="wifi">
+                            <i class="zmdi zmdi-wifi-alt-2"></i>
+                        </div>
+                        <div class="star">
+                            <i class="zmdi zmdi-star"></i>
+                        </div>
+                    </div>
+                    <div class="chat">
+                        <div class="chat-container">
+                            <div class="user-bar">
+                                <div class="back">
+                                    <i class="zmdi zmdi-arrow-left"></i>
+                                </div>
+                                <div class="avatar">
+                                    <img
+                                        src="data:image/jpeg;base64,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">
+                                </div>
+                                <div class="name">
+                                    <span>Yatish bhai</span>
+                                    <span class="status">online</span>
+                                </div>
+                                <div class="actions more">
+                                    <i class="zmdi zmdi-more-vert"></i>
+                                </div>
+                                <div class="actions attachment">
+                                    <i class="zmdi zmdi-attachment-alt"></i>
+                                </div>
+                                <div class="actions">
+                                    <i class="zmdi zmdi-phone"></i>
+                                </div>
+                            </div>
+                            <div class="conversation">
+                                <div class="conversation-container">
+                                    <div class="message sent" id="sendData">
+                                    </div>
+                                    <div class="message received" id="receiveData">
+
+                                    </div>
+                                </div>
+                                <form class="conversation-compose">
+                                    <div class="emoji">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" id="smiley"
+                                            x="3147" y="3209">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M9.153 11.603c.795 0 1.44-.88 1.44-1.962s-.645-1.96-1.44-1.96c-.795 0-1.44.88-1.44 1.96s.645 1.965 1.44 1.965zM5.95 12.965c-.027-.307-.132 5.218 6.062 5.55 6.066-.25 6.066-5.55 6.066-5.55-6.078 1.416-12.13 0-12.13 0zm11.362 1.108s-.67 1.96-5.05 1.96c-3.506 0-5.39-1.165-5.608-1.96 0 0 5.912 1.055 10.658 0zM11.804 1.01C5.61 1.01.978 6.034.978 12.23s4.826 10.76 11.02 10.76S23.02 18.424 23.02 12.23c0-6.197-5.02-11.22-11.216-11.22zM12 21.355c-5.273 0-9.38-3.886-9.38-9.16 0-5.272 3.94-9.547 9.214-9.547a9.548 9.548 0 0 1 9.548 9.548c0 5.272-4.11 9.16-9.382 9.16zm3.108-9.75c.795 0 1.44-.88 1.44-1.963s-.645-1.96-1.44-1.96c-.795 0-1.44.878-1.44 1.96s.645 1.963 1.44 1.963z"
+                                                fill="#7d8489" />
+                                        </svg>
+                                    </div>
+                                    <input class="input-msg" type="text" placeholder="Type a message" autocomplete="off"
+                                        autofocus id="chatid"></input>
+                                    <div class="photo">
+                                        <i class="zmdi zmdi-camera"></i>
+                                    </div>
+                                    <button class="send" type="button" onclick="chatSend()">
+                                        <div class="circle">
+                                            <i class="zmdi zmdi-mail-send"></i>
+                                        </div>
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+
+    function chatSend() {
+        var ws = new WebSocket('ws://127.0.0.1:8000/sc/')
+        var data = document.getElementById("chatid").value;
+
+        ws.onopen = function () {
+            output = " "
+            ws.send(data)
+            output += `<span id="sendData">${data}</span>
+                                        <span class="metadata">
+                                            <span class="time"></span><span class="tick"><svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="16" height="15"
+                                                    id="msg-dblcheck-ack" x="2063" y="2076">
+                                                    <path
+                                                        d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"
+                                                        fill="#4fc3f7" />
+                                                </svg></span>
+                                        </span>`
+
+            document.getElementById("sendData").innerHTML = output;
+
+        }
+        ws.onmessage = function (event) {
+            outputReceive = " "
+            outputReceive = `<span>${event.data}</span>
+                                        <span class="metadata"><span class="time"></span></span>`
+            document.getElementById("receiveData").innerHTML = outputReceive
+        }
+
+        ws.onerror = function (event) {
+            console.log("websocket errorr occured", event)
+        }
+
+        ws.close = function (event) {
+            console.log("websocket connection closed", event)
+        }
+
+    }
+
+    // ws.addEventListener('open', () => {
+    //     console.log("websocket connection open")
+    //     ws.send("Hello")
+    // })
+
+    // ws.addEventListener('message', (event) => {
+    //     console.log(event.data)
+    // })
+
+    // ws.addEventListener('error', (event) => {
+    //     console.log("Message error Occured...", event)
+    // })
+
+    // ws.addEventListener('close', (event) => {
+    //     console.log("websocket connection closed", event)
+    // })
+    // }
+</script>
+
+</html>

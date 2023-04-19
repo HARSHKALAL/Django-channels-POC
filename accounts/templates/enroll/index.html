@@ -530,7 +530,6 @@
     </div>
 </body>
 <script>
-
     function chatSend() {
         var ws = new WebSocket('ws://127.0.0.1:8000/sc/')
         var data = document.getElementById("chatid").value;
@@ -550,7 +549,6 @@
                                         </span>`
 
             document.getElementById("sendData").innerHTML = output;
-
         }
         ws.onmessage = function (event) {
             outputReceive = " "
@@ -566,26 +564,8 @@
         ws.close = function (event) {
             console.log("websocket connection closed", event)
         }
-
     }
 
-    // ws.addEventListener('open', () => {
-    //     console.log("websocket connection open")
-    //     ws.send("Hello")
-    // })
-
-    // ws.addEventListener('message', (event) => {
-    //     console.log(event.data)
-    // })
-
-    // ws.addEventListener('error', (event) => {
-    //     console.log("Message error Occured...", event)
-    // })
-
-    // ws.addEventListener('close', (event) => {
-    //     console.log("websocket connection closed", event)
-    // })
-    // }
 </script>
 
 </html>
